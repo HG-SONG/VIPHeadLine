@@ -50,7 +50,9 @@ class ListNewsViewController: UITableViewController, ListNewsDisplayLogic
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
+        
         self.title = "News"
+        self.tableView.register(ArticleTableViewCell.self, forCellReuseIdentifier: ArticleTableViewCell.identifier)
     }
     
     // MARK: Routing
@@ -109,15 +111,21 @@ extension ListNewsViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let displayedArticle = self.displayedArticles[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: ArticleTableViewCell.identifier) as? ArticleTableViewCell
-        //MARK: Q. View(cell)에 대한 구체타입 이것도 추상화로 끊어내는게 좋을까?
-        if cell == nil {
-            cell = ArticleTableViewCell(style: .default, reuseIdentifier: "ArticleTableViewCell")
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ArticleTableViewCell.identifier) as? ArticleTableViewCell else {
+            return UITableViewCell()
         }
         
-        cell?.titleLabel.text = displayedArticle.title
-        cell?.descriptionLabel.text = displayedArticle.description
+        cell.configure(title: displayedArticle.title, description: displayedArticle.description)
         
-        return cell!
+        return cell
+    }
+}
+
+// MARK: - Table view Delegate
+
+extension ListNewsViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 뷰컨이동
     }
 }

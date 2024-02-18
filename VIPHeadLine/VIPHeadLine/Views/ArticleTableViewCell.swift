@@ -7,7 +7,11 @@
 
 import UIKit
 
-class ArticleTableViewCell: UITableViewCell {
+protocol Abc where Self: UITableViewCell {
+    func configure(title:String ,description:String)
+}
+
+class ArticleTableViewCell: UITableViewCell,Abc {
     static let identifier = "ArticleTableViewCell"
     
     let titleLabel: UILabel = {
@@ -41,6 +45,13 @@ class ArticleTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        setLayout()
+    }
+    
+    
+    func configure(title: String , description: String) {
+        self.titleLabel.text = title
+        self.descriptionLabel.text = title
     }
     
     private func setLayout() {

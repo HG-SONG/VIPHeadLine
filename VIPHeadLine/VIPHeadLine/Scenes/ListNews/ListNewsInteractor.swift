@@ -26,15 +26,13 @@ class ListNewsInteractor: ListNewsBusinessLogic, ListNewsDataStore
 {
     var articles: [Article] = []
     var presenter: ListNewsPresentationLogic?
-    var worker: ArticlesWorker?
-
+    var worker = ListNewsWorker(articlesManager: ArticlesAPI())
     
     // MARK: getArticles
     
     func getArticles(request: ListNews.GetArticle.Request)
     {
-        worker = ArticlesWorker(articlesManager: ArticlesAPI())
-        worker?.getArticles { articles in
+        worker.getArticles { articles in
             self.articles = articles
             let response = ListNews.GetArticle.Response(articles: articles)
             self.presenter?.presentArticles(response: response)
